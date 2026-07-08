@@ -1,6 +1,17 @@
--- ผู้โจมตีแค่ไล่ดูว่ามี RemoteEvent อะไรบ้างในเกม
-for _, obj in ipairs(game:GetDescendants()) do
-    if obj:IsA("RemoteEvent") then
-        print(obj.Name)  -- เห็นชื่อจริงหมด รวมถึง Xz9_buY_k3
+local function logRemote(obj)
+    print(string.format("[%s] %s", obj.ClassName, obj:GetFullName()))
+end
+
+game.Loaded:Wait()
+
+for _, obj in game:GetDescendants() do
+    if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") or obj:IsA("UnreliableRemoteEvent") then
+        logRemote(obj)
     end
 end
+
+game.DescendantAdded:Connect(function(obj)
+    if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") or obj:IsA("UnreliableRemoteEvent") then
+        logRemote(obj)
+    end
+end)
